@@ -1,0 +1,18 @@
+version: "3"
+services:
+  fizz-buzz:
+    build: ./
+    ports:
+      - '8080:8080'
+    volumes:
+      - ./:/app
+    restart: unless-stopped
+    command: bash -c "go run cmd/api/main.go"
+  database:
+    image: postgres:14.2
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: fizz-buzz
+      POSTGRES_USER: root
