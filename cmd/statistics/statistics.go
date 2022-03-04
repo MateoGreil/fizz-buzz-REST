@@ -2,7 +2,6 @@ package statistics
 
 import (
 	"encoding/json"
-	"log"
 	"mateogreil/fizz-buzz-REST/cmd/models"
 	"net/http"
 )
@@ -21,9 +20,5 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		FizzBuzz:     fizzBuzz,
 		QueriesCount: 2,
 	}
-	responseJson, err := json.Marshal(response)
-	if err != nil {
-		log.Fatalf("Error happened in JSON marshal. Err: %s", err)
-	}
-	w.Write(responseJson)
+	json.NewEncoder(w).Encode(response)
 }
