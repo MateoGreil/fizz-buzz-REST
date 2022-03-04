@@ -1,7 +1,7 @@
 [ ] GET fizz-buzz
 	[x] function fizz-buzz
 	[x] handler
-	[ ] should return list of strings
+	[x] should return list of strings
 	[ ] tests
 [ ] GET statistics
 	[x] database

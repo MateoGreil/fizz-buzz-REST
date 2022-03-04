@@ -1,7 +1,7 @@
 package fizz_buzz
 
 import (
-	"fmt"
+	"encoding/json"
 	"mateogreil/fizz-buzz-REST/cmd/config"
 	"mateogreil/fizz-buzz-REST/cmd/models"
 	"net/http"
@@ -9,24 +9,21 @@ import (
 )
 
 // Main function of fizz buzz : it convert the query into the appropriate string
-func responseFizzBuzz(fizzBuzz models.FizzBuzz) string {
-	var responseStr string
+func response(fizzBuzz models.FizzBuzz) []string {
+	var response []string
 	for i := 1; i <= fizzBuzz.Limit; i++ {
 		if i%fizzBuzz.Int1 == 0 {
-			responseStr += fizzBuzz.Str1
+			response = append(response, fizzBuzz.Str1)
 		}
 		if i%fizzBuzz.Int2 == 0 {
-			responseStr += fizzBuzz.Str2
+			response = append(response, fizzBuzz.Str2)
 		}
 		if i%fizzBuzz.Int1 != 0 && i%fizzBuzz.Int2 != 0 {
-			responseStr += strconv.Itoa(i)
-		}
-		if i < fizzBuzz.Limit {
-			responseStr += ","
+			response = append(response, strconv.Itoa(i))
 		}
 	}
 
-	return responseStr
+	return response
 }
 
 // It handle the query and response the string
@@ -59,6 +56,6 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 
 	query := models.Query{Path: r.URL.Path, RemoteAddr: r.RemoteAddr, FizzBuzzId: fizzBuzz.ID}
 	config.Db().Create(&query)
-	responseStr := responseFizzBuzz(fizzBuzz)
-	fmt.Fprintf(w, responseStr)
+	response := response(fizzBuzz)
+	json.NewEncoder(w).Encode(response)
 }
